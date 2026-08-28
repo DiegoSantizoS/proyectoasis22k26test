@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Benchmarking — Módulo ERP de Compras y Cuentas por Pagar</title>
+<style>
+:root{
+  --navy-base:#05071A;
+  --navy-alt:#0A0E2B;
+  --purple:#8A57E7;
+  --blue:#628FFE;
+  --lavender:#797CFE;
+  --gray-text:#B8BCD9;
+  --ink:#1A1A1A;
+  --muted:#5A5F6E;
+  --rule:#D6D9E4;
+  --soft:#F4F6FB;
+}
+
+*{box-sizing:border-box;}
+
+@page{
+  size:A4;
+  margin:22mm 20mm 20mm 20mm;
+  @bottom-center{
+    content:counter(page);
+    font-family:Arial, Helvetica, sans-serif;
+    font-size:9pt;
+    color:#5A5F6E;
+  }
+}
+@page:first{ @bottom-center{content:none;} }
+
+html{background:#EEF0F5;}
+
+body{
+  font-family:Arial, Helvetica, sans-serif;
+  font-size:11pt;
+  line-height:1.5;
+  color:var(--ink);
+  margin:0;
+  background:#fff;
+  max-width:210mm;
+  margin-left:auto;
+  margin-right:auto;
+  padding:24mm 20mm;
+  text-align:justify;
+}
+
+p{margin:0 0 .85em 0;}
+
+/* ---------------- Portada ---------------- */
+.cover{
+  page-break-after:always;
+  min-height:245mm;
+  display:flex;
+  flex-direction:column;
+  text-align:left;
+  color:var(--ink);
+}
+.cover .datos{
+  font-size:11pt;
+  line-height:1.55;
+}
+.cover .datos .linea{display:block;}
+.cover .centro{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  text-align:center;
+}
+.cover h1{
+  font-size:20pt;
+  font-weight:bold;
+  line-height:1.3;
+  margin:0 0 .35em 0;
+  color:var(--ink);
+  text-align:center;
+}
+.cover .subtitulo{
+  font-size:15pt;
+  font-style:italic;
+  margin:0;
+  text-align:center;
+  color:var(--ink);
+}
+.cover .pie{
+  text-align:center;
+  font-size:11pt;
+  line-height:1.9;
+}
+.cover .pie .autor{
+  display:flex;
+  justify-content:center;
+  gap:56px;
+}
+
+/* ---------------- Títulos ---------------- */
+h2.sec{
+  font-size:14pt;
+  color:var(--navy-alt);
+  margin:0 0 .7em 0;
+  padding-bottom:.3em;
+  border-bottom:2.5px solid var(--purple);
+  text-align:left;
+  page-break-after:avoid;
+}
+h3{
+  font-size:12pt;color:var(--navy-alt);margin:1.5em 0 .5em 0;
+  text-align:left;page-break-after:avoid;
+}
+h4{
+  font-size:11pt;color:var(--muted);margin:1.2em 0 .4em 0;
+  text-align:left;font-weight:bold;page-break-after:avoid;
+}
+section{page-break-inside:auto;}
+.sec-block{margin-bottom:2em;}
+
+ul,ol{margin:0 0 .9em 0;padding-left:1.25em;}
+li{margin-bottom:.35em;}
+
+/* ---------------- Índice ---------------- */
+.toc{background:var(--soft);border-left:4px solid var(--purple);padding:16px 20px;}
+.toc ol{margin:0;padding-left:1.3em;}
+.toc li{margin-bottom:.3em;}
+.toc ol ol{margin-top:.3em;padding-left:1.2em;font-size:10.5pt;color:var(--muted);}
+
+/* ---------------- Tablas ---------------- */
+table{
+  width:100%;border-collapse:collapse;margin:.6em 0 1.2em 0;
+  font-size:9.5pt;page-break-inside:avoid;
+}
+figure.tbl{margin:.6em 0 1.3em 0;break-inside:avoid;page-break-inside:avoid;}
+figure.tbl table{margin:0;}
+p.cap{
+  text-align:left;font-size:9.5pt;color:var(--muted);
+  margin:0 0 .45em 0;font-style:italic;
+}
+th{
+  background:var(--navy-alt);color:#fff;text-align:left;
+  padding:7px 9px;border:1px solid var(--navy-alt);
+  font-size:9pt;line-height:1.3;vertical-align:middle;
+}
+td{
+  padding:6px 9px;border:1px solid var(--rule);vertical-align:top;
+  line-height:1.4;text-align:left;
+}
+tbody tr:nth-child(even) td{background:#FAFBFD;}
+td.c,th.c{text-align:center;}
+td.ok{color:#1B5E20;font-weight:bold;}
+td.pa{color:#8A6100;}
+td.nd{color:#8C8F9B;}
+.rf{white-space:nowrap;font-weight:bold;color:var(--navy-alt);}
+
+/* ---------------- Fichas de referente ---------------- */
+.card{
+  border:1px solid var(--rule);border-left:5px solid var(--blue);
+  padding:14px 18px;margin:0 0 1.3em 0;background:#fff;
+  page-break-inside:avoid;
+}
+.card h3{margin-top:0;}
+.card .tag{
+  display:inline-block;background:var(--soft);color:var(--navy-alt);
+  font-size:8.5pt;font-weight:bold;padding:2px 8px;border-radius:3px;
+  margin-bottom:.6em;letter-spacing:.03em;
+}
+.card.sector{border-left-color:var(--purple);}
+
+/* ---------------- Recuadros ---------------- */
+.note{
+  background:var(--soft);border-left:4px solid var(--lavender);
+  padding:12px 16px;margin:0 0 1.2em 0;font-size:10.5pt;
+  page-break-inside:avoid;
+}
+.note strong{color:var(--navy-alt);}
+
+/* ---------------- Referencias ---------------- */
+.refs p{
+  padding-left:1.5em;text-indent:-1.5em;font-size:10pt;margin-bottom:.7em;
+  text-align:left;word-break:break-word;
+}
+
+.foot{
+  margin-top:2.5em;padding-top:1em;border-top:1px solid var(--rule);
+  font-size:9pt;color:var(--muted);text-align:center;
+}
+
+@media print{
+  html{background:#fff;}
+  body{padding:0;max-width:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ============ PORTADA ============ -->
+<div class="cover">
+
+  <div class="datos">
+    <span class="linea">Universidad Mariano Gálvez</span>
+    <span class="linea">Facultad de Ingeniería, Matemáticas y Ciencias Físicas</span>
+    <span class="linea">Catedrático: Ing. Esduardo del Aguila</span>
+    <span class="linea">Día: 28 de agosto de 2026</span>
+    <span class="linea">Carrera: Ingeniería en Sistemas de la Información y Ciencias de la Computación.</span>
+    <span class="linea">Sistema: Sistemas Empresariales — Terminus, S.A.</span>
+    <span class="linea">Rama asignada: Módulo ERP de Compras y Cuentas por Pagar</span>
+  </div>
+
+  <div class="centro">
+    <h1>Benchmarking del Módulo ERP<br>de Compras y Cuentas por Pagar</h1>
+    <p class="subtitulo">Sistema ERP «Embutidos de Calidad, S.A.»</p>
+  </div>
+
+  <div class="pie">
+    <div class="autor">
+      <span>José Pablo Cano Cóbar</span>
+      <span>0901-23-1727</span>
+    </div>
+    <div>Guatemala, 28 de agosto del 2026</div>
+  </div>
+
+</div>
+
+<!-- ============ ÍNDICE ============ -->
+<section class="sec-block">
+  <h2 class="sec">Contenido</h2>
+  <div class="toc">
+    <ol>
+      <li>Introducción</li>
+      <li>Objetivos</li>
+      <li>Alcance
+        <ol>
+          <li>Alcance incluido</li>
+          <li>Delimitaciones</li>
+        </ol>
+      </li>
+      <li>Metodología
+        <ol>
+          <li>Tipo de benchmarking aplicado</li>
+          <li>Fases del estudio</li>
+          <li>Criterios de selección de los referentes</li>
+          <li>Criterios de comparación</li>
+          <li>Fuentes de información y limitaciones</li>
+        </ol>
+      </li>
+      <li>Marco de referencia: requerimientos del módulo</li>
+      <li>Análisis de los sistemas de referencia</li>
+      <li>Matriz comparativa</li>
+      <li>Hallazgos y prácticas susceptibles de adopción</li>
+      <li>Conclusiones</li>
+      <li>Recomendaciones</li>
+      <li>Referencias</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============ 1. INTRODUCCIÓN ============ -->
+<section class="sec-block">
+  <h2 class="sec">1. Introducción</h2>
+
+  <p>El presente documento contiene el estudio de <em>benchmarking</em> elaborado como
+  actividad preparatoria al desarrollo del Módulo de Compras y Cuentas por Pagar del
+  sistema de planificación de recursos empresariales (ERP) que se construye para la
+  empresa «Embutidos de Calidad, S.A.», dentro del proyecto integrador del curso de
+  Análisis de Sistemas II.</p>
+
+  <p>El <em>benchmarking</em> se entiende, siguiendo la formulación clásica de Camp
+  (1989), como el proceso continuo y sistemático de comparación de los productos,
+  servicios y procesos de trabajo propios frente a los de aquellas organizaciones
+  reconocidas como líderes, con el propósito de identificar brechas de desempeño y
+  adaptar las mejores prácticas al contexto propio. Conviene subrayar que la finalidad
+  del método no es la reproducción literal de la solución ajena, sino la comprensión de
+  las razones que explican su superioridad y su posterior adaptación con valor
+  agregado.</p>
+
+  <p>La aplicación de esta técnica resulta particularmente pertinente en el caso que
+  ocupa a este estudio. El área de Compras y Cuentas por Pagar administra la relación
+  comercial con los proveedores y supervisa los compromisos financieros derivados del
+  aprovisionamiento; en consecuencia, sus procesos se encuentran suficientemente
+  normalizados en la industria del software empresarial como para admitir una
+  comparación significativa con productos comerciales consolidados. Analizar cómo
+  resuelven estas necesidades los fabricantes líderes permite anticipar decisiones de
+  diseño, reducir el riesgo de omitir funcionalidades críticas y fundamentar
+  técnicamente las propuestas que se presenten ante la coordinación del proyecto.</p>
+
+  <p>El documento identifica seis sistemas de referencia, analiza sus capacidades en
+  materia de aprovisionamiento y cuentas por pagar, las contrasta contra los
+  requerimientos formalmente establecidos para el módulo y concluye con un conjunto de
+  prácticas cuya adopción se recomienda.</p>
+</section>
+
+<!-- ============ 2. OBJETIVOS ============ -->
+<section class="sec-block">
+  <h2 class="sec">2. Objetivos</h2>
+
+  <h3>2.1 Objetivo general</h3>
+  <p>Identificar y analizar las mejores prácticas funcionales implementadas por sistemas
+  ERP de referencia en el ámbito de compras y cuentas por pagar, con el fin de orientar
+  el diseño del módulo correspondiente del sistema empresarial de «Embutidos de Calidad,
+  S.A.».</p>
+
+  <h3>2.2 Objetivos específicos</h3>
+  <ul>
+    <li>Seleccionar un conjunto de sistemas ERP que constituyan referentes válidos, tanto
+    por su liderazgo de mercado como por su especialización en la industria alimentaria.</li>
+    <li>Documentar las capacidades funcionales que cada referente ofrece en la gestión de
+    proveedores, órdenes de compra, control de pagos e integración contable.</li>
+    <li>Contrastar dichas capacidades contra los requerimientos funcionales RF-COM-01 a
+    RF-COM-06 y los requerimientos no funcionales RNF-COM-01 y RNF-COM-02 definidos para
+    el módulo.</li>
+    <li>Determinar las brechas existentes entre lo previsto en los requerimientos y lo
+    que ofrece el estado del arte.</li>
+    <li>Formular recomendaciones concretas de diseño, así como los puntos de coordinación
+    que deben acordarse con los equipos responsables de los módulos vinculados.</li>
+  </ul>
+</section>
+
+<!-- ============ 3. ALCANCE ============ -->
+<section class="sec-block">
+  <h2 class="sec">3. Alcance</h2>
+
+  <h3>3.1 Alcance incluido</h3>
+  <p>El estudio se circunscribe al Módulo de Compras y Cuentas por Pagar y comprende
+  exclusivamente los procesos descritos en el flujo de trabajo del caso: consulta de
+  precios y movimientos de proveedores, emisión de órdenes de compra, recepción e ingreso
+  de mercancía, programación y control de pagos, generación de pólizas contables
+  automáticas y emisión del balance de antigüedad de saldos.</p>
+
+  <p>La comparación se realiza sobre seis sistemas: SAP S/4HANA, Oracle NetSuite,
+  Microsoft Dynamics 365 Business Central, Odoo, Softland ERP y CSB-System. El análisis
+  se limita al plano funcional; es decir, examina <em>qué</em> hace cada sistema y
+  <em>cómo</em> lo presenta al usuario.</p>
+
+  <h3>3.2 Delimitaciones</h3>
+  <p>Se declaran expresamente fuera del alcance del presente estudio los siguientes
+  aspectos:</p>
+  <ul>
+    <li><strong>Los demás módulos del sistema.</strong> Logística, Ventas y Cuentas por
+    Cobrar, Bancos, Contabilidad y Recursos Humanos se mencionan únicamente cuando existe
+    una dependencia directa con el módulo analizado.</li>
+    <li><strong>La evaluación económica.</strong> No se analizan precios de licenciamiento,
+    costos de implementación ni retorno de la inversión, por no ser pertinentes a un
+    proyecto académico.</li>
+    <li><strong>La arquitectura interna de los referentes.</strong> No se examinan
+    modelos de datos propietarios, estructuras de base de datos ni código fuente, salvo
+    en el caso de Odoo, cuya condición de programa de código abierto permite la
+    inspección directa.</li>
+    <li><strong>La selección de un proveedor.</strong> El estudio no persigue recomendar
+    la adquisición de ningún producto comercial, sino extraer criterios de diseño para un
+    desarrollo propio.</li>
+  </ul>
+</section>
+
+<!-- ============ 4. METODOLOGÍA ============ -->
+<section class="sec-block">
+  <h2 class="sec">4. Metodología</h2>
+
+  <h3>4.1 Tipo de benchmarking aplicado</h3>
+  <p>Se emplearon de manera combinada dos de las tipologías reconocidas en la
+  literatura:</p>
+  <ul>
+    <li><strong>Benchmarking competitivo:</strong> aplicado a SAP S/4HANA, Oracle
+    NetSuite, Microsoft Dynamics 365 Business Central, Odoo y Softland ERP, por tratarse
+    de productos que compiten en el mismo segmento funcional que el sistema en
+    desarrollo.</li>
+    <li><strong>Benchmarking funcional:</strong> aplicado a CSB-System, seleccionado no
+    por su posición de mercado sino por su especialización exclusiva en la industria
+    cárnica, lo que lo convierte en referente sectorial aun cuando no compita
+    directamente con los anteriores.</li>
+  </ul>
+
+  <h3>4.2 Fases del estudio</h3>
+  <p>El trabajo se estructuró conforme a las cinco fases del proceso de benchmarking:</p>
+  <figure class="tbl">
+<p class="cap">Tabla 1. Fases del proceso de benchmarking y su aplicación en el estudio.</p>
+<table>
+    <thead>
+      <tr><th style="width:7%">N.º</th><th style="width:24%">Fase</th><th>Actividades ejecutadas</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="c">1</td><td><strong>Planificación</strong></td>
+        <td>Delimitación del objeto de comparación (procesos de compras y cuentas por pagar), definición de los criterios derivados de los requerimientos RF-COM y RNF-COM, y establecimiento de los perfiles de referente a buscar.</td></tr>
+      <tr><td class="c">2</td><td><strong>Recolección de datos</strong></td>
+        <td>Consulta de documentación técnica oficial de los fabricantes, portales de producto, centros de ayuda y demostraciones interactivas de acceso público.</td></tr>
+      <tr><td class="c">3</td><td><strong>Análisis</strong></td>
+        <td>Mapeo de cada capacidad documentada contra el requerimiento correspondiente y determinación de las brechas entre lo previsto y el estado del arte.</td></tr>
+      <tr><td class="c">4</td><td><strong>Acción</strong></td>
+        <td>Formulación de las prácticas susceptibles de adopción, adaptadas al contexto de una empresa de 250 colaboradores del sector de embutidos.</td></tr>
+      <tr><td class="c">5</td><td><strong>Seguimiento</strong></td>
+        <td>Identificación de los puntos que deben revisarse con la coordinación del proyecto y que requerirán una segunda medición durante el desarrollo.</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+  <h3>4.3 Criterios de selección de los referentes</h3>
+  <p>La conformación de la muestra respondió a cuatro criterios explícitos, aplicados de
+  forma complementaria a fin de evitar el sesgo que produciría comparar únicamente
+  contra productos de gran escala:</p>
+  <ul>
+    <li><strong>Liderazgo de mercado</strong> en soluciones ERP para manufactura
+    (SAP S/4HANA).</li>
+    <li><strong>Disponibilidad de documentación técnica pública</strong> que permita
+    verificar las afirmaciones sin necesidad de licencia (Oracle NetSuite, Microsoft
+    Dynamics 365 Business Central).</li>
+    <li><strong>Posibilidad de inspección directa</strong> del producto por parte del
+    equipo estudiantil (Odoo, de código abierto).</li>
+    <li><strong>Pertinencia contextual</strong>, entendida como cercanía a la realidad
+    regional guatemalteca (Softland ERP) o especialización en la industria cárnica
+    (CSB-System).</li>
+  </ul>
+
+  <h3>4.4 Criterios de comparación</h3>
+  <p>Los criterios de contraste no se definieron de manera arbitraria, sino que se
+  derivaron directamente de los requerimientos formalmente establecidos para el módulo en
+  el documento de requerimientos generales del caso de estudio. Estos criterios se
+  detallan en la sección 5 y constituyen las columnas de la matriz comparativa presentada
+  en la sección 7.</p>
+
+  <h3>4.5 Fuentes de información y limitaciones</h3>
+  <p>La recolección se apoyó exclusivamente en fuentes documentales de acceso público:
+  centros de documentación oficial de los fabricantes, páginas de producto y
+  simulaciones interactivas. No se realizaron entrevistas, ni se tuvo acceso a
+  instalaciones productivas de ninguno de los sistemas analizados.</p>
+
+  <div class="note">
+    <strong>Limitación metodológica.</strong> El nivel de detalle disponible no es
+    homogéneo entre los seis referentes. Oracle NetSuite y Microsoft Dynamics 365
+    Business Central publican documentación técnica exhaustiva y de libre acceso, mientras
+    que Softland ERP y CSB-System difunden principalmente material comercial. En
+    consecuencia, la ausencia de una funcionalidad en la matriz comparativa debe
+    interpretarse como <em>no documentada en las fuentes consultadas</em> y no como
+    evidencia de su inexistencia en el producto.
+  </div>
+</section>
+
+<!-- ============ 5. MARCO DE REFERENCIA ============ -->
+<section class="sec-block">
+  <h2 class="sec">5. Marco de referencia: requerimientos del módulo</h2>
+
+  <p>Se transcriben a continuación los requerimientos que rigen el Módulo de Compras y
+  Cuentas por Pagar y que sirven de patrón de medida para el estudio.</p>
+
+  <figure class="tbl">
+<p class="cap">Tabla 2. Requerimientos funcionales del Módulo de Compras y Cuentas por Pagar.</p>
+<table>
+    <thead>
+      <tr><th style="width:16%">Código</th><th>Descripción</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="rf">RF-COM-01</td><td>Mantener el catálogo de datos y movimientos de proveedores.</td></tr>
+      <tr><td class="rf">RF-COM-02</td><td>Gestionar el listado de precios de compra por proveedor y producto.</td></tr>
+      <tr><td class="rf">RF-COM-03</td><td>Procesar la emisión de órdenes de compra y el registro de compras finalizadas.</td></tr>
+      <tr><td class="rf">RF-COM-04</td><td>Llevar el control de la caja para pagos a proveedores.</td></tr>
+      <tr><td class="rf">RF-COM-05</td><td>Generar el enlace automático con Contabilidad para el envío de pólizas de compra y pagos.</td></tr>
+      <tr><td class="rf">RF-COM-06</td><td>Emitir reportes de balance de antigüedad de saldos de cuentas por pagar.</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+  <figure class="tbl">
+<p class="cap">Tabla 3. Requerimientos no funcionales del módulo.</p>
+<table>
+    <thead>
+      <tr><th style="width:16%">Código</th><th style="width:20%">Atributo</th><th>Descripción</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="rf">RNF-COM-01</td><td>Seguridad</td><td>La autorización de pagos y compras requiere permisos basados en roles (RBAC) y aprobación jerárquica.</td></tr>
+      <tr><td class="rf">RNF-COM-02</td><td>Integridad</td><td>Debe garantizarse la consistencia ACID en la generación automática de pólizas contables tras cada pago registrado.</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+  <p>Adicionalmente, el caso de estudio define dos indicadores de gestión propios del
+  área que el módulo debe ser capaz de alimentar: el <strong>promedio de antigüedad de
+  saldos con proveedores</strong> y el <strong>porcentaje de órdenes de compra
+  autorizadas en tiempo</strong> mediante el módulo de Tesorería.</p>
+</section>
+
+<!-- ============ 6. ANÁLISIS ============ -->
+<section class="sec-block">
+  <h2 class="sec">6. Análisis de los sistemas de referencia</h2>
+
+  <div class="card">
+    <span class="tag">REFERENTE 1 · BENCHMARKING COMPETITIVO</span>
+    <h3>6.1 SAP S/4HANA — Sourcing &amp; Procurement (módulo MM)</h3>
+    <p><strong>Justificación de la selección.</strong> Constituye el estándar de facto en
+    la industria manufacturera y, particularmente, en el sector de alimentos. Su modelo de
+    proceso ha sido adoptado como referencia por buena parte del mercado.</p>
+    <p><strong>Capacidades identificadas.</strong> El módulo articula el ciclo completo de
+    aprovisionamiento (<em>procure-to-pay</em>) en cinco etapas encadenadas: solicitud de
+    pedido, orden de compra, entrada de mercancías, verificación de facturas e integración
+    financiera. La transacción de verificación de facturas ejecuta el cotejo automático
+    entre orden de compra, entrada de mercancía y factura del proveedor; cuando los datos
+    concuerdan, la factura queda liberada para pago. Verificada la factura, el sistema
+    transmite la información al módulo financiero, que procesa el pago al proveedor y
+    cierra el ciclo mediante la automatización de cuentas por pagar (Grupo Ebim, 2024).</p>
+    <p><strong>Correspondencia con los requerimientos.</strong> El flujo de solicitud y
+    orden de compra atiende el RF-COM-03; la integración automática con el módulo
+    financiero atiende el RF-COM-05; el maestro de proveedores atiende el RF-COM-01.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">REFERENTE 2 · BENCHMARKING COMPETITIVO</span>
+    <h3>6.2 Oracle NetSuite — Procurement y Accounts Payable</h3>
+    <p><strong>Justificación de la selección.</strong> Su documentación técnica es de
+    acceso libre y exhaustivo, y la organización funcional de su módulo guarda una
+    correspondencia notable con la estructura descrita en el caso de estudio.</p>
+    <p><strong>Capacidades identificadas.</strong> El sistema canaliza las órdenes de
+    compra hacia proveedores aprobados y contratos previamente negociados; ejecuta el
+    cotejo a tres vías señalando las discrepancias entre orden, recepción y facturación;
+    incorpora el enrutamiento de aprobaciones como mecanismo de prevención del gasto no
+    autorizado; y ofrece analítica de gasto en tiempo real junto con un portal de
+    colaboración para proveedores (Oracle NetSuite, s. f.-a).</p>
+    <p>En materia de cuentas por pagar, el producto incluye un conjunto de seis reportes
+    de fábrica, entre los que figuran el resumen y el detalle de antigüedad de saldos, el
+    registro de cuentas por pagar y el historial de pagos por factura y por pago (Oracle,
+    s. f.-a). El reporte de antigüedad admite configurarse para envejecer los documentos
+    por fecha de vencimiento o por fecha de transacción, distinción de diseño que resulta
+    relevante para el módulo propio.</p>
+    <p><strong>Precisión terminológica.</strong> El material comercial del fabricante
+    emplea la expresión «<em>vendor scorecards</em>»; sin embargo, en el producto no
+    existe un módulo con esa denominación. La calificación de proveedores se implementa
+    mediante la funcionalidad de desempeño de entregas, que mide puntualidad —días
+    promedio de adelanto o retraso, desviación estándar y confianza del riesgo
+    predicho— y forma parte de una funcionalidad avanzada de pago (Oracle, s. f.-b). Se
+    trata, por tanto, de una métrica logística y no financiera, que no debe confundirse
+    con el reporte de antigüedad de saldos.</p>
+    <p><strong>Correspondencia con los requerimientos.</strong> El enrutamiento de
+    aprobaciones corresponde al RNF-COM-01; los reportes de antigüedad atienden el
+    RF-COM-06; la canalización hacia contratos negociados se vincula al RF-COM-02.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">REFERENTE 3 · BENCHMARKING COMPETITIVO</span>
+    <h3>6.3 Microsoft Dynamics 365 Business Central</h3>
+    <p><strong>Justificación de la selección.</strong> Es, de los referentes analizados,
+    el que se aproxima con mayor fidelidad a la escala de «Embutidos de Calidad, S.A.»,
+    empresa de 250 colaboradores.</p>
+    <p><strong>Capacidades identificadas.</strong> El sistema soporta el ciclo de
+    cotización, orden, factura y nota de crédito de compra; admite órdenes de compra
+    abiertas para compromisos de largo plazo sobre grandes cantidades distribuidas en
+    varios envíos; permite el registro de recepciones parciales y la combinación de
+    varias recepciones en una sola factura; incorpora flujos de aprobación que enrutan
+    las compras de mayor cuantía hacia el gerente de contabilidad; integra un servicio de
+    reconocimiento óptico de caracteres que convierte las facturas en formato PDF de los
+    proveedores en documentos electrónicos; y registra automáticamente los costos de
+    compra en las cuentas del libro mayor (Microsoft, 2025).</p>
+    <p><strong>Pertinencia sectorial.</strong> Las órdenes abiertas y las recepciones
+    parciales revisten particular importancia en una empresa cárnica, donde el
+    abastecimiento de materia prima rara vez se completa en una sola entrega.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">REFERENTE 4 · BENCHMARKING COMPETITIVO</span>
+    <h3>6.4 Odoo — Módulo Purchase</h3>
+    <p><strong>Justificación de la selección.</strong> Su condición de programa de código
+    abierto permite instalarlo, recorrer sus pantallas y examinar su modelo de datos, lo
+    que lo convierte en el referente de mayor utilidad práctica para un equipo
+    estudiantil.</p>
+    <p><strong>Capacidades identificadas.</strong> El módulo automatiza el envío de
+    solicitudes de cotización a los proveedores en función de los niveles de existencias;
+    permite importar las listas de precios y referencias de los proveedores para decidir
+    con base en promociones, cantidades y condiciones contractuales especiales; habilita
+    licitaciones de compra que integran las respuestas de los proveedores y comparan las
+    propuestas recibidas; convierte las órdenes de compra en facturas de proveedor para
+    evitar la doble digitación; y produce estadísticas de desempeño de proveedores que
+    incluyen retrasos de entrega, descuentos negociados y cantidades adquiridas (Odoo,
+    s. f.).</p>
+    <p><strong>Correspondencia con los requerimientos.</strong> La gestión de listas de
+    precios por proveedor satisface íntegramente el RF-COM-02.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">REFERENTE 5 · BENCHMARKING COMPETITIVO</span>
+    <h3>6.5 Softland ERP — referente regional</h3>
+    <p><strong>Justificación de la selección.</strong> Se trata de un sistema con
+    presencia comercial establecida en Centroamérica y operación local en Guatemala, por
+    lo que su diseño incorpora las particularidades fiscales y de negocio del entorno en
+    que operará el sistema desarrollado.</p>
+    <p><strong>Capacidades identificadas.</strong> El fabricante documenta la gestión de
+    compras desde la planificación hasta la recepción de la mercadería, la conversión
+    automática de pedidos de venta en órdenes de compra a proveedores, la trazabilidad de
+    las órdenes de compra, el control de inventario por bodega con manejo de lotes y
+    series, y la integración automática de los procesos de compras con los módulos de
+    contabilidad y finanzas (Softland, s. f.).</p>
+    <p><strong>Valor para el proyecto.</strong> Su aporte principal no es funcional sino
+    contextual: evidencia cómo se resuelven en la región el manejo multimoneda, las
+    retenciones locales y los formatos de antigüedad de saldos de uso corriente en
+    Guatemala.</p>
+  </div>
+
+  <div class="card sector">
+    <span class="tag">REFERENTE 6 · BENCHMARKING FUNCIONAL</span>
+    <h3>6.6 CSB-System — referente sectorial de la industria cárnica</h3>
+    <p><strong>Justificación de la selección.</strong> Es un sistema ERP de origen alemán
+    especializado de manera exclusiva en la industria cárnica y de productos derivados,
+    condición que ningún otro referente de la muestra reúne.</p>
+    <p><strong>Capacidades identificadas.</strong> Su cobertura abarca la cadena de valor
+    completa: planificación de crianza, engorde y entregas entrantes; procesos de faenado,
+    inspección, clasificación y despiece; aseguramiento de calidad y trazabilidad del
+    producto; control de cámaras frías y gestión de almacenes refrigerados; y costeo,
+    gestión de lotes y analítica transversal con indicadores de decisión (CSB-System,
+    s. f.).</p>
+    <p><strong>Valor para el proyecto.</strong> El aporte determinante de este referente
+    se encuentra en el tratamiento de la compra de materia prima cárnica, que no se
+    adquiere por unidad sino por peso variable y exige el registro del lote, la fecha de
+    faenado y el certificado sanitario correspondiente. Esta particularidad enlaza de
+    manera directa con las metas de inocuidad del caso de estudio, orientadas a la
+    obtención de certificaciones internacionales del tipo FSSC 22000, BRCGS o IFS.</p>
+  </div>
+</section>
+
+<!-- ============ 7. MATRIZ ============ -->
+<section class="sec-block">
+  <h2 class="sec">7. Matriz comparativa</h2>
+
+  <p>La siguiente matriz sintetiza la correspondencia entre los requerimientos del módulo
+  y las capacidades documentadas en cada referente.</p>
+
+  <figure class="tbl">
+<p class="cap">Tabla 4. Correspondencia entre los requerimientos del módulo y las capacidades documentadas de los referentes.</p>
+<table>
+    <thead>
+      <tr>
+        <th style="width:15%">Requerimiento</th>
+        <th class="c">SAP<br>S/4HANA</th>
+        <th class="c">Oracle<br>NetSuite</th>
+        <th class="c">Dynamics 365<br>Bus. Central</th>
+        <th class="c">Odoo<br>Purchase</th>
+        <th class="c">Softland<br>ERP</th>
+        <th class="c">CSB-<br>System</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="rf">RF-COM-01</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c pa">Parcial</td></tr>
+      <tr><td class="rf">RF-COM-02</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c pa">Parcial</td><td class="c nd">n/d</td></tr>
+      <tr><td class="rf">RF-COM-03</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c pa">Parcial</td></tr>
+      <tr><td class="rf">RF-COM-04</td><td class="c pa">Parcial</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c pa">Parcial</td><td class="c pa">Parcial</td><td class="c nd">n/d</td></tr>
+      <tr><td class="rf">RF-COM-05</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c nd">n/d</td></tr>
+      <tr><td class="rf">RF-COM-06</td><td class="c pa">Parcial</td><td class="c ok">Sí</td><td class="c pa">Parcial</td><td class="c nd">n/d</td><td class="c pa">Parcial</td><td class="c nd">n/d</td></tr>
+      <tr><td class="rf">RNF-COM-01</td><td class="c pa">Parcial</td><td class="c ok">Sí</td><td class="c ok">Sí</td><td class="c nd">n/d</td><td class="c nd">n/d</td><td class="c nd">n/d</td></tr>
+      <tr><td class="rf">RNF-COM-02</td><td class="c ok">Sí</td><td class="c pa">Parcial</td><td class="c ok">Sí</td><td class="c pa">Parcial</td><td class="c pa">Parcial</td><td class="c nd">n/d</td></tr>
+    </tbody>
+  </table>
+</figure>
+
+  <div class="note">
+    <strong>Simbología.</strong>
+    <strong style="color:#1B5E20">Sí</strong> — capacidad explícitamente documentada en las
+    fuentes consultadas &nbsp;·&nbsp;
+    <strong style="color:#8A6100">Parcial</strong> — capacidad parcialmente documentada o
+    inferida del flujo de proceso descrito &nbsp;·&nbsp;
+    <strong style="color:#8C8F9B">n/d</strong> — no documentada en las fuentes consultadas.<br>
+    Conforme a la limitación metodológica declarada en el apartado 4.5, la marca
+    «n/d» no afirma la ausencia de la funcionalidad en el producto, sino la ausencia de
+    evidencia documental pública sobre ella.
+  </div>
+</section>
+
+<!-- ============ 8. HALLAZGOS ============ -->
+<section class="sec-block">
+  <h2 class="sec">8. Hallazgos y prácticas susceptibles de adopción</h2>
+
+  <p>Del análisis precedente se desprenden cinco prácticas cuya incorporación al diseño
+  del módulo se considera pertinente, ordenadas según su prioridad.</p>
+
+  <figure class="tbl">
+<p class="cap">Tabla 5. Prácticas identificadas y su justificación.</p>
+<table>
+    <thead>
+      <tr>
+        <th style="width:6%" class="c">N.º</th>
+        <th style="width:24%">Práctica</th>
+        <th style="width:16%">Referente</th>
+        <th>Justificación de su adopción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="c">1</td>
+        <td><strong>Cotejo a tres vías</strong> (orden de compra – recepción – factura)</td>
+        <td>SAP S/4HANA<br>Oracle NetSuite</td>
+        <td>Los requerimientos del caso no lo exigen de manera explícita; sin embargo, es el control que impide liquidar facturas correspondientes a mercancía que nunca ingresó. Su omisión constituye la brecha de control interno más significativa detectada.</td>
+      </tr>
+      <tr>
+        <td class="c">2</td>
+        <td><strong>Órdenes de compra abiertas y recepciones parciales</strong></td>
+        <td>Microsoft Dynamics 365</td>
+        <td>Responde a la naturaleza del abastecimiento cárnico, en el que la entrega completa de un pedido en un solo evento es la excepción y no la regla.</td>
+      </tr>
+      <tr>
+        <td class="c">3</td>
+        <td><strong>Compra por peso variable con lote, fecha de faenado y certificado sanitario</strong></td>
+        <td>CSB-System</td>
+        <td>La materia prima cárnica no admite el tratamiento de unidad discreta propio de un ERP genérico. Esta práctica vincula el módulo con las metas de inocuidad y las certificaciones internacionales previstas por la empresa.</td>
+      </tr>
+      <tr>
+        <td class="c">4</td>
+        <td><strong>Envejecimiento configurable por fecha de vencimiento o de transacción</strong></td>
+        <td>Oracle NetSuite</td>
+        <td>Detalle de diseño de bajo costo de implementación y alto valor analítico, que enriquece el reporte exigido por el RF-COM-06 y alimenta el indicador de promedio de antigüedad de saldos con proveedores.</td>
+      </tr>
+      <tr>
+        <td class="c">5</td>
+        <td><strong>Enrutamiento de aprobaciones por jerarquía y monto</strong></td>
+        <td>Oracle NetSuite<br>Microsoft Dynamics 365</td>
+        <td>Constituye la materialización concreta del RNF-COM-01. Ambos referentes lo resuelven mediante reglas parametrizables asociadas al monto de la operación y al rol del aprobador.</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+
+  <h3>8.1 Dependencias con otros módulos identificadas durante el estudio</h3>
+  <p>El análisis del ciclo de aprovisionamiento en los referentes puso de manifiesto tres
+  dependencias que el módulo no puede resolver de forma autónoma y que deben acordarse
+  formalmente con los equipos correspondientes:</p>
+  <figure class="tbl">
+<p class="cap">Tabla 6. Dependencias que requieren acuerdo interequipos.</p>
+<table>
+    <thead>
+      <tr><th style="width:24%">Dependencia</th><th style="width:20%">Equipo involucrado</th><th>Asunto por acordar</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="rf">RF-COM-03 → RF-BAN-03</td>
+        <td>Módulo ERP Bancario</td>
+        <td>La orden de compra se emite en el módulo de Compras, pero su autorización se ejecuta en Tesorería. Debe definirse el contrato de la interfaz y los estados por los que atraviesa el documento: emitida, en autorización, autorizada y recibida.</td>
+      </tr>
+      <tr>
+        <td class="rf">RF-COM-05 → RF-CON-01</td>
+        <td>Módulo ERP Contabilidad</td>
+        <td>Debe acordarse la estructura de la póliza automática. En cumplimiento del RNF-COM-02, si el registro contable falla, el pago no debe quedar registrado.</td>
+      </tr>
+      <tr>
+        <td class="rf">RNF-COM-01</td>
+        <td>Componente Seguridad</td>
+        <td>El control de acceso basado en roles debe consumirse del componente transversal de Seguridad y no implementarse de manera independiente, a fin de evitar dos modelos de permisos incompatibles.</td>
+      </tr>
+    </tbody>
+  </table>
+</figure>
+</section>
+
+<!-- ============ 9. CONCLUSIONES ============ -->
+<section class="sec-block">
+  <h2 class="sec">9. Conclusiones</h2>
+  <ol>
+    <li>Los seis sistemas analizados coinciden en un núcleo funcional común —maestro de
+    proveedores, ciclo de orden de compra, recepción, control de pagos e integración
+    contable automática— que confirma la pertinencia y la completitud de los
+    requerimientos RF-COM-01 a RF-COM-05 definidos para el módulo.</li>
+
+    <li>Se identificó una brecha de control interno relevante: ninguno de los
+    requerimientos formulados exige el cotejo a tres vías, práctica que los dos referentes
+    de mayor madurez implementan como mecanismo central de validación previa al pago.</li>
+
+    <li>La escala de la empresa objeto del caso guarda mayor correspondencia con Microsoft
+    Dynamics 365 Business Central que con SAP S/4HANA, por lo que las decisiones de diseño
+    tomadas del primero resultan más transferibles al proyecto.</li>
+
+    <li>La especialización sectorial de CSB-System reveló un requisito de dominio que no
+    aparece en ningún referente genérico: el tratamiento de la materia prima cárnica como
+    producto de peso variable sujeto a trazabilidad sanitaria.</li>
+
+    <li>El estudio evidenció que tres de los procesos del módulo dependen de módulos
+    desarrollados por otros equipos, lo que confirma la necesidad de establecer contratos
+    de interfaz documentados antes de iniciar la construcción.</li>
+
+    <li>Se constató la conveniencia de verificar la terminología comercial de los
+    fabricantes contra su documentación técnica. El caso de las denominadas
+    «<em>vendor scorecards</em>» ilustra cómo una expresión de mercadeo puede inducir a
+    error respecto de la funcionalidad efectivamente disponible en el producto.</li>
+  </ol>
+</section>
+
+<!-- ============ 10. RECOMENDACIONES ============ -->
+<section class="sec-block">
+  <h2 class="sec">10. Recomendaciones</h2>
+  <ol>
+    <li><strong>Proponer formalmente la incorporación del cotejo a tres vías</strong> como
+    requerimiento funcional adicional del módulo, presentando ante la coordinación del
+    proyecto la justificación de control interno documentada en el apartado 8.</li>
+
+    <li><strong>Instalar Odoo en un entorno local</strong> y documentar mediante capturas
+    de pantalla su flujo de compras. De los seis referentes es el único que admite
+    inspección directa, lo que permitiría sustentar futuras entregas con evidencia propia
+    en lugar de con documentación de terceros.</li>
+
+    <li><strong>Convocar una reunión de coordinación</strong> con los equipos responsables
+    de los módulos Bancario y de Contabilidad, así como del Componente de Seguridad, a fin
+    de acordar los contratos de interfaz consignados en la Tabla 6 antes del inicio de la
+    construcción.</li>
+
+    <li><strong>Ampliar el modelo de datos de la orden de compra</strong> para admitir
+    peso variable, número de lote, fecha de faenado y referencia del certificado
+    sanitario, conforme a lo observado en CSB-System.</li>
+
+    <li><strong>Parametrizar el reporte de antigüedad de saldos</strong> de modo que
+    permita al usuario elegir entre envejecer por fecha de vencimiento o por fecha de
+    transacción, siguiendo el diseño de Oracle NetSuite.</li>
+
+    <li><strong>Repetir la medición durante la fase de construcción</strong>, en
+    congruencia con el carácter continuo que Camp (1989) atribuye al benchmarking. El
+    presente estudio constituye la primera medición y no un ejercicio concluido.</li>
+  </ol>
+</section>
+
+<!-- ============ 11. REFERENCIAS ============ -->
+<section class="sec-block">
+  <h2 class="sec">11. Referencias</h2>
+  <div class="refs">
+    <p>Camp, R. C. (1989). <em>Benchmarking: The search for industry best practices that
+    lead to superior performance</em>. ASQC Quality Press.</p>
+
+    <p>CSB-System. (s. f.). <em>Meat ERP: Industry software</em>. Recuperado el 28 de
+    agosto de 2026, de https://www.csb.com/en/industries/meat</p>
+
+    <p>Grupo Ebim. (2024). <em>SAP MM: Qué es el módulo de Gestión de Materiales en
+    S/4HANA</em>. Recuperado el 28 de agosto de 2026, de
+    https://grupoebim.com/blog/sap-mm/</p>
+
+    <p>Microsoft. (2025). <em>Purchasing in Business Central</em>. Microsoft Learn.
+    Recuperado el 28 de agosto de 2026, de
+    https://learn.microsoft.com/en-us/dynamics365/business-central/purchasing-manage-purchasing</p>
+
+    <p>Odoo. (s. f.). <em>Odoo Purchase</em>. Recuperado el 28 de agosto de 2026, de
+    https://www.odoo.com/app/purchase</p>
+
+    <p>Oracle. (s. f.-a). <em>Payables reports</em>. NetSuite Applications Suite.
+    Recuperado el 28 de agosto de 2026, de
+    https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_N1529262.html</p>
+
+    <p>Oracle. (s. f.-b). <em>Vendor delivery performance</em>. NetSuite Applications
+    Suite. Recuperado el 28 de agosto de 2026, de
+    https://docs.oracle.com/en/cloud/saas/netsuite/ns-online-help/section_162922440050.html</p>
+
+    <p>Oracle NetSuite. (s. f.-a). <em>Procurement</em>. Recuperado el 28 de agosto de
+    2026, de https://www.netsuite.com/portal/products/erp/procurement.shtml</p>
+
+    <p>Softland. (s. f.). <em>Compras, inventario y proyectos</em>. Softland Guatemala.
+    Recuperado el 28 de agosto de 2026, de
+    https://softland.com/gt/productos/softland-erp/compras-inventario-y-proyectos/</p>
+
+    <p>Terminus, S.A. (2026). <em>Reglas de estandarización Terminus</em> (Versión 1).
+    Equipo de Estandarización, Universidad Mariano Gálvez de Guatemala.</p>
+  </div>
+
+  <div class="foot">
+    Benchmarking del Módulo ERP de Compras y Cuentas por Pagar · José Pablo Cano Cóbar ·
+    Carné 0901-23-1727 · Análisis de Sistemas II · Agosto de 2026
+  </div>
+</section>
+
+</body>
+</html>
