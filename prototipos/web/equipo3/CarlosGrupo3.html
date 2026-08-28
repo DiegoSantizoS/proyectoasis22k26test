@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benchmarking cxp y programación de pagos</title>
+</head>
+
+<body>
+    <h1>Cuentas por pagar y programación de pagos</h1>
+    <h2>Objetivo</h2>
+    <p>Determinar cómo los sistemas ERP administran las obligaciones financieras generadas por las compras
+        realizadas a proveedores.</p>
+    <p>El caso establece que después de registrar una compra debe incrementarse la cuenta por pagar correspondiente
+        al proveedor y posteriormente programarse el pago de acuerdo con su vencimiento.</p>
+    <h2>Generación de cuentas por pagar</h2>
+    <p>pUtilizando el flujo presentado por el software de <a
+            href="https://www.freshbooks.com/expenses-and-receipts-tracking">freshbooks</a>
+        se planea implementar un flujo como el siguiente:
+        generar la orden de compra → enviar a cuentas por pagar → generar ticket visual en una línea de tiempo →
+        programación de pago → Pago
+        <a
+            href="https://www.freshbooks.com/_next/image?url=https%3A%2F%2Fwww.freshbooks.com%2Fmedia%2F2025%2F07%2Fexpenses-imported-dashboard-desktop.png&w=3840&q=75">
+            <img src="https://www.freshbooks.com/_next/image?url=https%3A%2F%2Fwww.freshbooks.com%2Fmedia%2F2025%2F07%2Fexpenses-imported-dashboard-desktop.png&w=3840&q=75"
+                alt="Freshbooks" width="600px" height="400px"></a>
+    </p>
+    <h3>Datos principales</h3>
+    <ul>
+        <li>proveedor</li>
+        <li>Numero de factura</li>
+        <li>Serie de factura</li>
+        <li>Fecha de emisión</li>
+        <li>Fecha de vencimiento</li>
+        <li>Monto</li>
+        <li>Impuestos</li>
+        <li>Saldo pendiente</li>
+        <li>Moneda</li>
+        <li>Estado del saldo con el proveedor</li>
+    </ul>
+    <h2>Estados de las cuentas por pagar</h2>
+    <ul>
+        <li>Pendiente de pago</li>
+        <li>Parcialmente pagada</li>
+        <li>Pagada</li>
+        <li>Vencida</li>
+        <li>Programada</li>
+        <li>Anulada</li>
+    </ul>
+    <h2>Historial de facturas (ordenes de compra)</h2>
+    <p>Se utilizará como referencia la tabla de la siguiente imágen del sistema de <a
+            href="https://www.klippa.com/en/spendcontrol-en/">klippa</a> para mostrar un historial de gastos</p>
+    <a href="https://www.klippa.com/wp-content/uploads/2024/07/SC-Hero-Visual-D-1.png">
+        <img src=" https://www.klippa.com/wp-content/uploads/2024/07/SC-Hero-Visual-D-1.png" alt="Control de gastos"
+        width="600px" height="400px"></a>
+</body>
+
+</html>
