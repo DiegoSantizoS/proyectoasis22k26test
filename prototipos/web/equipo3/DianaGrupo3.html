@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>5. Integración contable, saldos y controles — Benchmarking Compras y CxP</title>
+</head>
+<body>
+
+<nav>
+  <ul>
+    <li><a href="JoseGrupo3.html">1. Introducción, alcance y metodología</a></li>
+    <li><a href="CarlosGrupo3.html">2. Proveedores y listado de precios</a></li>
+    <li><a href="MiguelGrupo3.html">3. Órdenes de compra y recepción de compras</a></li>
+    <li><a href="PedroGrupo3.html">4. Cuentas por pagar y programación de pagos</a></li>
+    <li><a href="DianaGrupo3.html">5. Integración contable, saldos y controles</a></li>
+    <li><a href="DiegoGrupo3.html">6. Propuesta para nuestro componente</a></li>
+  </ul>
+</nav>
+
+<h1>5. Integración contable, saldos y controles</h1>
+<p><em>Caso de estudio: Embutidos de Calidad, S.A.</em></p>
+
+<h2>5.1 Objetivo</h2>
+<p>Analizar cómo los ERP integran las compras y pagos con los módulos financieros y contables, y qué controles implementan para garantizar la integridad de las operaciones.</p>
+
+<h2>5.2 Integración con Contabilidad</h2>
+<p>El sistema solicitado debe generar automáticamente el enlace con Contabilidad para las pólizas derivadas de compras y pagos. La integración esperada sería:</p>
+
+<h3>Rama: Compra</h3>
+<ol>
+  <li>Compra</li>
+  <li>Cuenta por pagar</li>
+  <li>Póliza contable</li>
+</ol>
+
+<h3>Rama: Pago</h3>
+<ol>
+  <li>Pago</li>
+  <li>Disminución de cuenta por pagar</li>
+  <li>Movimiento bancario</li>
+  <li>Póliza contable</li>
+</ol>
+
+<h2>5.3 Ejemplo contable</h2>
+<p>Compra de materia prima por Q10,000:</p>
+
+<h3>Registro de la compra</h3>
+<table border="1" cellpadding="6" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Cuenta</th>
+      <th>Debe</th>
+      <th>Haber</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Inventario / Materia prima</td>
+      <td>Q10,000</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>Proveedores</td>
+      <td>&nbsp;</td>
+      <td>Q10,000</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>Registro del pago</h3>
+<table border="1" cellpadding="6" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Cuenta</th>
+      <th>Debe</th>
+      <th>Haber</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Proveedores</td>
+      <td>Q10,000</td>
+      <td>&nbsp;</td>
+    </tr>
+    <tr>
+      <td>Bancos</td>
+      <td>&nbsp;</td>
+      <td>Q10,000</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>5.4 Controles de integridad</h2>
+<p>Se compararán los mecanismos utilizados por cada ERP para impedir:</p>
+<ul>
+  <li>Pagos duplicados</li>
+  <li>Facturas duplicadas</li>
+  <li>Pagos superiores al saldo</li>
+  <li>Compras sin autorización</li>
+  <li>Cambios posteriores a una aprobación</li>
+  <li>Eliminación de operaciones contabilizadas</li>
+  <li>Acceso de usuarios no autorizados</li>
+</ul>
+
+<h2>5.5 Roles</h2>
+<p>Cada operación pasa por un responsable distinto, lo que separa funciones y refuerza la trazabilidad del proceso:</p>
+<table border="1" cellpadding="6" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Rol</th>
+      <th>Acción</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Analista de compras</td><td>Crear orden</td></tr>
+    <tr><td>Jefe de compras</td><td>Revisar orden</td></tr>
+    <tr><td>Gerencia</td><td>Autorizar</td></tr>
+    <tr><td>Bodega</td><td>Registrar recepción</td></tr>
+    <tr><td>Cuentas por pagar</td><td>Registrar factura</td></tr>
+    <tr><td>Tesorería</td><td>Ejecutar pago</td></tr>
+    <tr><td>Contabilidad</td><td>Validar póliza</td></tr>
+  </tbody>
+</table>
+
+<h2>5.6 Auditoría</h2>
+<p>Cada operación debería conservar:</p>
+<ul>
+  <li>Usuario</li>
+  <li>Fecha</li>
+  <li>Hora</li>
+  <li>Acción realizada</li>
+  <li>Datos anteriores</li>
+  <li>Datos nuevos</li>
+  <li>Estado de la transacción</li>
+</ul>
+
+<h2>5.7 Matriz comparativa</h2>
+<table border="1" cellpadding="6" cellspacing="0">
+  <thead>
+    <tr>
+      <th>Control</th>
+      <th>ERP 1</th>
+      <th>ERP 2</th>
+      <th>ERP 3</th>
+      <th>Propuesta</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Roles</td><td>Sí</td><td>Sí</td><td>Sí</td><td>Sí</td></tr>
+    <tr><td>Aprobaciones</td><td>Sí</td><td>Sí</td><td>Sí</td><td>Sí</td></tr>
+    <tr><td>Bitácora</td><td>Sí</td><td>Sí</td><td>Sí</td><td>Sí</td></tr>
+    <tr><td>Bloqueo de documentos contabilizados</td><td>Sí</td><td>Sí</td><td>Sí</td><td>Sí</td></tr>
+    <tr><td>Prevención de duplicados</td><td>Sí</td><td>Sí</td><td>Sí</td><td>Sí</td></tr>
+    <tr><td>Integración contable</td><td>Sí</td><td>Sí</td><td>Sí</td><td>Sí</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<p>El benchmarking permitirá identificar cómo los ERP analizados administran el ciclo completo de proveedor, compra, recepción, cuenta por pagar, pago y contabilización. La integración contable no es un paso aislado, sino una consecuencia automática y controlada de cada compra y cada pago: toda operación queda enlazada a una póliza, todo saldo queda respaldado por un movimiento verificable, y toda acción queda atribuida a un usuario y un momento.</p>
+
+<p><small>Benchmarking del Módulo de Compras y Cuentas por Pagar — Sección 5 de 6 — Diana</small></p>
+
+</body>
+</html>
