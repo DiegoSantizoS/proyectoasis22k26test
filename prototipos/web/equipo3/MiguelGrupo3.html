@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+</head>
+
+<body>
+    <main>
+
+        <h1>
+            Órdenes de compra y recepción de compras
+        </h1>
+        <p>
+            </h2>Benchmarking del proceso de compras y recepción de mercancíasbs</h2> <br>
+            <br>
+             <strong>Benchmarking de órdenes de compra </strong>  <br>
+            <br>
+            <br>
+            Una orden de compra (Purchase Order, PO) es un documento mediante el cual una organización formaliza ante un
+            proveedor la solicitud de determinados bienes o servicios bajo condiciones previamente establecidas.
+            <br>
+            <br>
+            De acuerdo con Microsoft Dynamics 365, la orden de compra contiene información del proveedor y líneas con
+            los productos o servicios solicitados. Además, permite realizar seguimiento de las recepciones y
+            posteriormente relacionarlas con las facturas del proveedor. <br>
+            <br>
+            Proceso de referencia <br>
+            <br>
+            Un proceso de órdenes de compra basado en buenas prácticas puede estructurarse de la siguiente manera: <br>
+            <br>
+            Solicitud de compra → Revisión → Cotización → Selección del proveedor → Creación de orden de compra →
+            Aprobación → Envío al proveedor → Confirmación → Seguimiento <br>
+            <br>
+            Microsoft Dynamics 365 contempla espacios de trabajo destinados a la prepabrración y revisión de órdenes, su
+            procesamiento hasta la aprobación y la confirmación con el proveedor. <br>
+            <br>
+            El benchmarking permite identificar las siguientes prácticas: <br>
+            <br>
+            Utilizar órdenes de compra numeradas y trazables.
+            Registrar proveedor, productos, cantidades, precios y condiciones.
+            Implementar diferentes estados para controlar el ciclo de la orden.
+            Utilizar procesos de aprobación.
+            Mantener el historial de modificaciones.
+            Relacionar la orden con la recepción y posteriormente con la factura.
+            Permitir el seguimiento de pedidos pendientes y vencidos. <br>
+            <br>
+            Benchmarking de órdenes de compra y recepción de compra <br>
+            <br>
+            Esta etapa representa la integración entre la orden de compra y la recepción física de los productos. El
+            objetivo principal es garantizar que los productos recibidos correspondan con lo solicitado en la orden
+            de compra. <br>
+            <br>
+            Microsoft Dynamics 365 permite registrar directamente la recepción de mercancías desde una orden de compra y
+            también contempla escenarios donde la recepción se registra inicialmente en el almacén y posteriormente se
+            relaciona con la orden. <br>
+            <br>
+            <br>
+            <strong>Benchmarking de recepción de compra</strong> <br>
+            <br>
+            <br>
+            La recepción de compra consiste en registrar formalmente que los bienes solicitados mediante una orden de
+            compra han sido entregados por el proveedor. <br>
+            <br>
+            Este proceso es importante porque conecta la adquisición con el inventario y posteriormente con el proceso
+            de cuentas por pagar. <br>
+            <br>
+            Microsoft Dynamics 365 define el recibo de producto como el proceso mediante el cual se registra que los
+            productos pedidos fueron recibidos, permitiendo posteriormente procesar las líneas de la orden para
+            facturación. <br>
+            <br>
+            <br>
+            Controles recomendados <br>
+            Control Objetivo
+            Validación de proveedor Confirmar que la mercancía pertenece al proveedor correspondiente.
+            Validación de OC Confirmar que existe una orden de compra autorizada.
+            Validación de cantidad Comparar cantidad recibida contra cantidad solicitada.
+            Validación de producto Confirmar que el producto recibido corresponde al solicitado.
+            Inspección de calidad Identificar productos dañados o defectuosos.
+            Registro documental Asociar factura, albarán o comprobante de entrega.
+            Actualización de inventario Incrementar las existencias cuando corresponda.
+            Registro de diferencias Documentar faltantes, sobrantes o productos rechazados. <br>
+            <br>
+            Además, Microsoft Dynamics 365 contempla el uso de avisos anticipados de envío (ASN), mediante los cuales el
+            proveedor puede informar previamente cantidades, fechas de envío e incluso números de serie o lote. Esto
+            puede reducir el trabajo necesario durante la recepción. <br>
+            <br>
+            <strong>Comparación de prácticas
+            Característica Microsoft Dynamics 365 SAP / SAP</strong> <br>
+            <br>
+            SAP Concur utiliza reglas de matching para identificar diferencias entre la factura y la orden de compra.
+            Entre sus modalidades se encuentran el two-way matching, que compara factura y orden de compra, y el
+            three-way matching, que además incorpora las cantidades recibidas <br>
+            <br>
+            <br>
+            De esta forma, una factura puede ser detenida cuando las cantidades o valores no coinciden con lo autorizado
+            y recibido. SAP documenta que este mecanismo ayuda a controlar discrepancias antes del pago al proveedor.
+            <br>
+        </p>
+
+
+
+    </main>
+</body>
+
+</html>
