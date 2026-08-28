@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Benchmarking - Compras y Cuentas por Pagar</title>
+</head>
+<body>
+
+    <h1>Benchmarking del Módulo de Compras y Cuentas por Pagar</h1>
+    <h2>Caso de estudio: Embutidos de Calidad, S.A.</h2>
+
+    <nav>
+        <h3>Índice</h3>
+        <ul>
+            <li><a href="JoseGrupo3.html">1. Introducción, alcance y metodología</a></li>
+            <li><a href="CarlosGrupo3.html">2. Proveedores y listado de precios</a></li>
+            <li><a href="MiguelGrupo3.html">3. Órdenes de compra y recepción de compras</a></li>
+            <li><a href="PedroGrupo3.html">4. Cuentas por pagar y programación de pagos</a></li>
+            <li><a href="DianaGrupo3.html">5. Integración contable, saldos y controles</a></li>
+            <li><a href="DiegoGrupo3.html">6. Propuesta para nuestro componente</a></li>
+        </ul>
+    </nav>
+
+    <hr>
+
+    <main>
+        <h2>1. Introducción, alcance y metodología</h2>
+
+        <h3>1.1 Introducción</h3>
+        <p>
+            El presente documento desarrolla un benchmarking funcional del módulo de Compras y
+            Cuentas por Pagar propuesto para Embutidos de Calidad, S.A., mediante la comparación
+            de soluciones ERP existentes en el mercado.
+        </p>
+
+        <p>
+            El propósito del análisis es identificar las funcionalidades, procesos, controles y
+            buenas prácticas utilizadas por otros sistemas para determinar cuáles pueden ser
+            consideradas durante el diseño del nuevo componente.
+        </p>
+
+        <p>
+            El área de Compras y Cuentas por Pagar de Embutidos de Calidad, S.A. tiene como
+            responsabilidad administrar la relación comercial con proveedores, procurar el
+            abastecimiento de mercancías y supervisar los compromisos financieros de la empresa.
+        </p>
+
+        <p>
+            El benchmarking también responde al objetivo estratégico de la organización de avanzar
+            hacia la digitalización de su cadena de suministro.
+        </p>
+
+        <h3>1.2 Objetivo general</h3>
+        <p>
+            Comparar las funcionalidades de diferentes sistemas ERP relacionadas con Compras y
+            Cuentas por Pagar, con el propósito de identificar características y prácticas que
+            puedan incorporarse al módulo desarrollado para Embutidos de Calidad, S.A.
+        </p>
+
+        <h3>1.3 Objetivos específicos</h3>
+        <ul>
+            <li>Analizar la administración de proveedores.</li>
+            <li>Comparar el manejo de listas de precios.</li>
+            <li>Evaluar el proceso de órdenes de compra.</li>
+            <li>Comparar los mecanismos de recepción y registro de compras.</li>
+            <li>Analizar la administración de cuentas por pagar.</li>
+            <li>Evaluar la programación y autorización de pagos.</li>
+            <li>Comparar la integración con Contabilidad.</li>
+            <li>Identificar controles de seguridad y trazabilidad.</li>
+            <li>Formular una propuesta funcional para el módulo propio.</li>
+        </ul>
+
+        <h3>1.4 Alcance</h3>
+        <p>El benchmarking comprende los procesos relacionados con:</p>
+
+        <ol>
+            <li>Proveedores.</li>
+            <li>Listas de precios.</li>
+            <li>Órdenes de compra.</li>
+            <li>Recepción de compras.</li>
+            <li>Cuentas por pagar.</li>
+            <li>Programación de pagos.</li>
+            <li>Integración contable.</li>
+            <li>Consultas y reportes.</li>
+            <li>Seguridad y controles.</li>
+        </ol>
+
+        <p>
+            No se analizarán en profundidad procesos de producción, ventas, nómina o recursos
+            humanos, salvo cuando exista una integración necesaria con Compras y Cuentas por Pagar.
+        </p>
+
+        <h3>1.5 Sistemas seleccionados</h3>
+        <p>A manera de ejemplo, pueden seleccionarse tres ERP:</p>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Sistema</th>
+                    <th>Justificación</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>SAP Business One</td>
+                    <td>
+                        ERP orientado a pequeñas y medianas empresas con módulos financieros
+                        y de compras integrados.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Odoo</td>
+                    <td>
+                        ERP modular que integra Compras, Inventario y Contabilidad.
+                    </td>
+                </tr>
+                <tr>
+                    <td>Oracle NetSuite</td>
+                    <td>
+                        ERP basado en nube con procesos financieros, compras y gestión de proveedores.
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>
+            Los sistemas anteriores son una propuesta metodológica. La información específica de
+            cada uno deberá documentarse mediante fuentes oficiales durante la investigación.
+        </p>
+
+        <h3>1.6 Metodología</h3>
+        <p>
+            La metodología utilizada será una comparación funcional por procesos.
+        </p>
+
+        <p>Para cada sistema se analizarán los siguientes criterios:</p>
+
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Criterio</th>
+                    <th>Pregunta de análisis</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Funcionalidad</td>
+                    <td>¿Qué permite hacer el sistema?</td>
+                </tr>
+                <tr>
+                    <td>Automatización</td>
+                    <td>¿Qué actividades realiza automáticamente?</td>
+                </tr>
+                <tr>
+                    <td>Integración</td>
+                    <td>¿Con qué módulos intercambia información?</td>
+                </tr>
+                <tr>
+                    <td>Seguridad</td>
+                    <td>¿Qué controles y permisos utiliza?</td>
+                </tr>
+                <tr>
+                    <td>Trazabilidad</td>
+                    <td>¿Se puede conocer quién realizó cada operación?</td>
+                </tr>
+                <tr>
+                    <td>Reportes</td>
+                    <td>¿Qué información genera?</td>
+                </tr>
+                <tr>
+                    <td>Usabilidad</td>
+                    <td>¿Qué tan sencillo es ejecutar el proceso?</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p>
+            Al finalizar cada sección se identificarán las características que podrían incorporarse
+            al sistema de Embutidos de Calidad, S.A.
+        </p>
+    </main>
+
+</body>
+</html>
