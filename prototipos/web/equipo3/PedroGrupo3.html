@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Benchmarking: Órdenes de Compra</title>
+</head>
+<body>
+
+    <h1>3. Benchmarking de Órdenes de compra y recepción de compras</h1>
+
+    <h2>3.1 Objetivo</h2>
+    <p>Comparar cómo los sistemas ERP gestionan el ciclo completo desde la creación de una orden de compra hasta la recepción física de los bienes para Embutidos de Calidad, S.A.</p>
+
+    <h2>3.2 Creación de órdenes de compra</h2>
+    <p>Los campos principales que el sistema debe registrar son:</p>
+    <ul>
+        <li>Número de orden y fecha</li>
+        <li>Proveedor, producto y cantidad</li>
+        <li>Precio, descuento e impuestos</li>
+        <li>Estado de la orden</li>
+    </ul>
+
+    <h2>3.3 Flujo de autorización</h2>
+    <p>El sistema debe soportar un flujo jerárquico: Solicitud -> Orden de compra -> Autorización -> Envío al proveedor.</p>
+
+    <h2>3.4 Recepción de compras</h2>
+    <p>Al recibir la mercadería en bodega, el sistema debe permitir:</p>
+    <ul>
+        <li>Recepción completa del pedido.</li>
+        <li>Recepción parcial, dejando la orden abierta para el saldo pendiente.</li>
+        <li>Manejo de productos rechazados.</li>
+    </ul>
+
+    <h2>3.5 Estados de una orden</h2>
+    <p>Para mantener la trazabilidad, los estados propuestos son:</p>
+    <ol>
+        <li>Creada</li>
+        <li>Pendiente de autorización</li>
+        <li>Autorizada</li>
+        <li>Enviada al proveedor</li>
+        <li>Parcialmente recibida</li>
+        <li>Recibida y Cerrada</li>
+    </ol>
+
+    <h2>3.6 Hallazgos principales</h2>
+    <p>Se recomienda implementar aprobaciones por jerarquía, permitir recepciones parciales en bodega y manejar estados claramente definidos para evitar errores o compras no autorizadas.</p>
+
+</body>
+</html>
